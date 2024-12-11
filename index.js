@@ -5,7 +5,7 @@ dotenv.config();
 const app = express();
 
 app.get('/', (req, res)=>{
-    res.send("hello");
+    res.send("hello i am node image");
 })
 
 app.listen(process.env.PORT,()=>{

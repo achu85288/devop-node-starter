@@ -1,13 +1,28 @@
-FROM node
+# Use a smaller base image
+FROM node:alpine AS build
 
+# Set working directory
 WORKDIR /app
-# Copy the rest of the source files into the image.
-COPY . .
+
+# Copy only necessary files
+COPY package.json package-lock.json ./
+
+# Install dependencies
 RUN npm install
 
+# Copy source code
+COPY . .
+ 
 
-# Expose the port that the application listens on.
+# Use a smaller base image for the runtime
+FROM node:alpine
+
+# Set working directory
+WORKDIR /app
+
+# Copy only necessary files from the build stage
+COPY --from=build /app /app
+
+# Expose port and run the app
 EXPOSE 3000
-
-# Run the application.
-CMD ["npm","start"]
+CMD ["npm", "start"]
